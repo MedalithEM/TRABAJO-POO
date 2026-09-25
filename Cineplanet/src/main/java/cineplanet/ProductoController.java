@@ -60,6 +60,7 @@ public class ProductoController {
 
     private ObservableList<Producto> listaProductos =
             FXCollections.observableArrayList();
+    private int siguienteId = 6;
 
     @FXML
     public void initialize() {
@@ -87,29 +88,24 @@ public class ProductoController {
         tablaProductos.setItems(listaProductos);
 
         // Productos de ejemplo
-        registrarProductoInicial(
-                new Producto(1, "Canchita Mediana",
-                        "Canchita", 12.00, 50)
+        registrarProductoInicial(new Producto(1, "Canchita Mediana",
+                "Canchita", 12.00, 50)
         );
 
-        registrarProductoInicial(
-                new Producto(2, "Gaseosa Grande",
-                        "Bebidas", 10.00, 40)
+        registrarProductoInicial(new Producto(2, "Gaseosa Grande",
+                "Bebidas", 10.00, 40)
         );
 
-        registrarProductoInicial(
-                new Producto(3, "Hot Dog",
-                        "Comida", 15.00, 30)
+        registrarProductoInicial(new Producto(3, "Hot Dog",
+                "Comida", 15.00, 30)
         );
 
-        registrarProductoInicial(
-                new Producto(4, "Nachos",
-                        "Comida", 18.00, 25)
+        registrarProductoInicial(new Producto(4, "Nachos",
+                "Comida", 18.00, 25)
         );
 
-        registrarProductoInicial(
-                new Producto(5, "Combo Clásico",
-                        "Combos", 28.00, 20)
+        registrarProductoInicial(new Producto(5, "Combo Clásico",
+                "Combos", 28.00, 20)
         );
     }
 
@@ -123,7 +119,7 @@ public class ProductoController {
 
         try {
 
-            int id = Integer.parseInt(txtId.getText());
+            int id = siguienteId;
             String nombre = txtNombre.getText();
             String categoria = txtCategoria.getText();
             double precio = Double.parseDouble(txtPrecio.getText());
@@ -137,7 +133,7 @@ public class ProductoController {
                 return;
             }
 
-            if (crud.buscar(id) != null) {
+            if (nombre.isEmpty() || categoria.isEmpty()) {
                 mostrarMensaje(
                         "Error",
                         "El ID ya existe."
@@ -155,6 +151,8 @@ public class ProductoController {
 
             crud.registrar(producto);
             listaProductos.add(producto);
+
+            siguienteId++;
 
             limpiar();
 
@@ -304,4 +302,3 @@ public class ProductoController {
         alerta.showAndWait();
     }
 }
-
