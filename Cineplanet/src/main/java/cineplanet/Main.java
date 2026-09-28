@@ -12,7 +12,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        URL archivoFXML = Main.class.getResource("/vista-productos.fxml");
+        URL archivoFXML = Main.class.getResource("/vista-producto.fxml");
 
         System.out.println("FXML encontrado: " + archivoFXML);
 
