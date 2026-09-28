@@ -3,58 +3,29 @@ package cineplanet;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.util.Vector;
+
 public class ProductoController {
-    @FXML
-    private TextField txtId;
+    @FXML private TextField txtId;
+    @FXML private TextField txtNombre;
+    @FXML private TextField txtCategoria;
+    @FXML private TextField txtPrecio;
+    @FXML private TextField txtStock;
+    @FXML private TableView<Producto> tablaProductos;
+    @FXML private TableColumn<Producto, Integer> colId;
+    @FXML private TableColumn<Producto, String> colNombre;
+    @FXML private TableColumn<Producto, String> colCategoria;
+    @FXML private TableColumn<Producto, Double> colPrecio;
+    @FXML private TableColumn<Producto, Integer> colStock;
+    @FXML private Button btnRegistrar;
+    @FXML private Button btnActualizar;
+    @FXML private Button btnEliminar;
+    @FXML private Button btnLimpiar;
+    @FXML private TableColumn<Producto, Void>colAccion;
 
-    @FXML
-    private TextField txtNombre;
-
-    @FXML
-    private TextField txtCategoria;
-
-    @FXML
-    private TextField txtPrecio;
-
-    @FXML
-    private TextField txtStock;
-
-    @FXML
-    private TableView<Producto> tablaProductos;
-
-    @FXML
-    private TableColumn<Producto, Integer> colId;
-
-    @FXML
-    private TableColumn<Producto, String> colNombre;
-
-    @FXML
-    private TableColumn<Producto, String> colCategoria;
-
-    @FXML
-    private TableColumn<Producto, Double> colPrecio;
-
-    @FXML
-    private TableColumn<Producto, Integer> colStock;
-
-    @FXML
-    private Button btnRegistrar;
-
-    @FXML
-    private Button btnActualizar;
-
-    @FXML
-    private Button btnEliminar;
-
-    @FXML
-    private Button btnLimpiar;
 
     private ProductoCRUD crud = new ProductoCRUD();
 
@@ -65,34 +36,59 @@ public class ProductoController {
     @FXML
     public void initialize() {
 
-        colId.setCellValueFactory(
-                new PropertyValueFactory<>("id")
-        );
+        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-        colNombre.setCellValueFactory(
-                new PropertyValueFactory<>("nombre")
-        );
+        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
 
-        colCategoria.setCellValueFactory(
-                new PropertyValueFactory<>("categoria")
-        );
+        colCategoria.setCellValueFactory(new PropertyValueFactory<>("categoria"));
 
-        colPrecio.setCellValueFactory(
-                new PropertyValueFactory<>("precio")
-        );
+        colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
 
-        colStock.setCellValueFactory(
-                new PropertyValueFactory<>("stock")
-        );
+        colStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
 
         tablaProductos.setItems(listaProductos);
 
-        // Productos de ejemplo
+        colAccion.setCellFactory(param -> new TableCell<Producto,Void>() {
+
+            private final Button btnEliminar = new Button("X");
+
+            {
+                btnEliminar.setStyle("-fx-background-color: #e53935;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-size: 14px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-background-radius: 3px;" +
+                        "-fx-border-radius: 3px;" +
+                        "-fx-padding: 4px 8px;"
+
+                );
+                btnEliminar.setOnAction(event -> {
+                    Producto producto =
+                            getTableView().getItems().get(getIndex());
+
+                    crud.eliminar(producto.getId());
+                    listaProductos.remove(producto);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(btnEliminar);
+                }
+            }
+        });
+
+
         registrarProductoInicial(new Producto(1, "Canchita Mediana",
                 "Canchita", 12.00, 50)
         );
 
-        registrarProductoInicial(new Producto(2, "Gaseosa Grande",
+        registrarProductoInicial(new Producto(2, "Gaseosa Inkacola",
                 "Bebidas", 10.00, 40)
         );
 
@@ -115,7 +111,7 @@ public class ProductoController {
     }
 
     @FXML
-    private void registrar() {
+    private void registrar() {   //metodo
 
         try {
 
@@ -149,7 +145,7 @@ public class ProductoController {
                     stock
             );
 
-            crud.registrar(producto);
+            crud.registrar(producto);  //Abstraccion
             listaProductos.add(producto);
 
             siguienteId++;
@@ -222,32 +218,7 @@ public class ProductoController {
         }
     }
 
-    @FXML
-    private void eliminar() {
 
-        Producto seleccionado =
-                tablaProductos.getSelectionModel().getSelectedItem();
-
-        if (seleccionado == null) {
-
-            mostrarMensaje(
-                    "Aviso",
-                    "Seleccione un producto de la tabla."
-            );
-
-            return;
-        }
-
-        crud.eliminar(seleccionado.getId());
-        listaProductos.remove(seleccionado);
-
-        limpiar();
-
-        mostrarMensaje(
-                "Correcto",
-                "Producto eliminado correctamente."
-        );
-    }
 
     @FXML
     private void limpiar() {

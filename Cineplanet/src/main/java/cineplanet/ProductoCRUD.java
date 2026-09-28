@@ -6,17 +6,17 @@ import java.util.ArrayList;
 public class ProductoCRUD {
     private ArrayList<Producto> productos = new ArrayList<>();
 
-    // REGISTRAR
+
     public void registrar(Producto producto) {
         productos.add(producto);
     }
 
-    // LISTAR
+
     public ArrayList<Producto> listar() {
         return productos;
     }
 
-    // BUSCAR
+
     public Producto buscar(int id) {
 
         for (Producto producto : productos) {
@@ -29,10 +29,8 @@ public class ProductoCRUD {
         return null;
     }
 
-    // ACTUALIZAR
-    public boolean actualizar(int id, String nombre,
-                              String categoria, double precio,
-                              int stock) {
+
+    public boolean actualizar(int id, String nombre, String categoria, double precio, int stock) {
 
         Producto producto = buscar(id);
 
@@ -49,7 +47,7 @@ public class ProductoCRUD {
         return false;
     }
 
-    // ELIMINAR
+
     public boolean eliminar(int id) {
 
         Producto producto = buscar(id);
